@@ -23,10 +23,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
-import br.com.leandrosnazareth.pdvapi.dto.ProductDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.ProductDTO;
+import br.com.leandrosnazareth.pdvapi.domain.entity.Product;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.ProductService;
-import br.com.leandrosnazareth.pdvapi.util.MensageConstant;
+import br.com.leandrosnazareth.pdvapi.util.MessageConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -59,7 +60,7 @@ public class ProductController {
             throws ResourceNotFoundException {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
         ProductDTO product = productService.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + id));
         return ResponseEntity.ok().body(product);
     }
 
@@ -70,7 +71,7 @@ public class ProductController {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
         // retorna a exception
         ProductDTO productDto = productService.findByIdAndActive(id)
-                .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + id));
         return ResponseEntity.ok().body(productDto);
     }
 
@@ -81,7 +82,7 @@ public class ProductController {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
         // retorna a exception
         ProductDTO productDto = productService.findByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + name));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + name));
         return ResponseEntity.ok().body(productDto);
     }
 
@@ -92,7 +93,16 @@ public class ProductController {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
         // retorna a exception
         ProductDTO productDto = productService.findByNameAndActive(name)
-                .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + name));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + name));
+        return ResponseEntity.ok().body(productDto);
+    }
+
+    @GetMapping("barcode/active/{barcode}")
+    @ApiOperation(value = "Buscar produto ativo pelo código de barras")
+    public ResponseEntity<ProductDTO> findByBarcode(@PathVariable String barcode) {
+        ProductDTO productDto = productService.findByBarcodeAndActive(barcode)
+            .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + barcode));
+
         return ResponseEntity.ok().body(productDto);
     }
 
@@ -106,7 +116,7 @@ public class ProductController {
     @DeleteMapping("{id}")
     public Map<String, Boolean> deleteById(@PathVariable Long id) {
         ProductDTO productDto = productService.findByIdAndActive(id)
-                .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + id));
         productService.delete(productDto);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
@@ -119,7 +129,7 @@ public class ProductController {
             @Valid @RequestBody ProductDTO productDto) throws ResourceNotFoundException {
         productService.findById(productDto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        MensageConstant.PRODUTO_NAO_ENCONTRADO + productDto.getId()));
+                        MessageConstant.PRODUTO_NAO_ENCONTRADO + productDto.getId()));
         return ResponseEntity.ok(productService.save(productDto));
     }
 

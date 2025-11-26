@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
-import br.com.leandrosnazareth.pdvapi.dto.SaleDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.SaleDTO;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.SaleService;
 import io.swagger.annotations.Api;

@@ -8,10 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Usuario;
 import br.com.leandrosnazareth.pdvapi.domain.repository.UserRepository;
-import br.com.leandrosnazareth.pdvapi.dto.UserDTO;
-import br.com.leandrosnazareth.pdvapi.dto.UserFullDTO;
 
 @Service
 public class UserService {

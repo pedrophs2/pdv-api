@@ -1,4 +1,4 @@
-package br.com.leandrosnazareth.pdvapi.dto;
+package br.com.leandrosnazareth.pdvapi.domain.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -9,6 +9,7 @@ import lombok.Data;
 public class ProductDTO {
 
     private Long id;
+    private String barcode;
     private String name;
     private BigDecimal price;
     private Boolean active;

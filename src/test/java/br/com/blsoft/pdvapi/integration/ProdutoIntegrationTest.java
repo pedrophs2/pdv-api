@@ -4,6 +4,7 @@ import static br.com.blsoft.pdvapi.util.ConstantTest.DEFAULT_PRODUTO_ID;
 import static br.com.blsoft.pdvapi.util.ConstantTest.DEFAULT_PRODUTO_NOME;
 import static br.com.blsoft.pdvapi.util.ConstantTest.DEFAULT_PRODUTO_VALOR;
 import static br.com.blsoft.pdvapi.util.ConstantTest.DEFAULT_PRODUTO_ACTIVE;
+import static br.com.blsoft.pdvapi.util.ConstantTest.DEFAULT_BARCODE;
 import static br.com.blsoft.pdvapi.util.ConstantTest.DEFAULT_DATE_CREATE;
 import static br.com.blsoft.pdvapi.util.ConstantTest.DEFAULT_DATE_UPDATE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -150,6 +151,7 @@ public class ProdutoIntegrationTest {
     public Product criarProdutoPadrao() {
         var product = new Product(
                 DEFAULT_PRODUTO_ID,
+                DEFAULT_BARCODE,
                 DEFAULT_PRODUTO_NOME,
                 DEFAULT_PRODUTO_VALOR,
                 DEFAULT_PRODUTO_ACTIVE,
@@ -161,6 +163,7 @@ public class ProdutoIntegrationTest {
     public Product criarProdutoNotActive() {
         var product = new Product(
                 DEFAULT_PRODUTO_ID,
+                DEFAULT_BARCODE,
                 DEFAULT_PRODUTO_NOME,
                 DEFAULT_PRODUTO_VALOR,
                 false,

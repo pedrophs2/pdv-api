@@ -18,12 +18,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByIdAndActive(Long id, Boolean active);
 
-    // busca produto por nome ativo ou inativo
     Optional<Product> findByNameAndActive(String name, Boolean active);
+
+    Optional<Product> findByBarcodeAndActive(String barcode, Boolean active);
 
     Optional<Product> findByName(String name);
 
-    // desativar sem deletar
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query("UPDATE Product r SET r.active = false WHERE r.id = :productId")

@@ -33,9 +33,15 @@ import lombok.NoArgsConstructor;
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    @NotNull(message = "{campo.nome.obrigatorio}")
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
+    private String barcode;
 
     @Column(nullable = false, unique = true)
     @Size(min = 2, max = 50, message = "{campo.nome.tamanho}")
@@ -65,8 +71,10 @@ public class Product implements Serializable {
     protected void prePersist() {
         if (Objects.isNull(active))
             active = true;
+
         if (this.createdAt == null)
             createdAt = LocalDateTime.now();
+        
         if (this.updatedAt == null)
             updatedAt = LocalDateTime.now();
     }

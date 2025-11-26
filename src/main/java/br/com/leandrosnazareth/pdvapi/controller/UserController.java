@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
+import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Usuario;
-import br.com.leandrosnazareth.pdvapi.dto.UserDTO;
-import br.com.leandrosnazareth.pdvapi.dto.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.UserService;
-import br.com.leandrosnazareth.pdvapi.util.MensageConstant;
+import br.com.leandrosnazareth.pdvapi.util.MessageConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<UserDTO> findUserByID(@PathVariable Long id)
             throws ResourceNotFoundException {
         UserDTO usuarioDTO = usuarioService.findByIdDTO(id)
-                .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + id));
         return ResponseEntity.ok().body(usuarioDTO);
     }
 
@@ -51,7 +51,7 @@ public class UserController {
     @DeleteMapping("{id}")
     public Map<String, Boolean> deleteById(@PathVariable Long id) {
         Usuario usuario = usuarioService.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + id));
         usuarioService.delete(usuario);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
@@ -82,7 +82,7 @@ public class UserController {
     @PutMapping
     public UserDTO atualizar(@RequestBody UserFullDTO usuarioFullDTO) {
         Usuario usuarioTemporadrio = usuarioService.findById(usuarioFullDTO.getId()).orElseThrow(
-                () -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + usuarioFullDTO.getId()));
+                () -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + usuarioFullDTO.getId()));
         if (!usuarioFullDTO.getPassword().equals(usuarioTemporadrio.getPassword())) { // se Senhas for diferentes
             String senhaCriptografada = new BCryptPasswordEncoder().encode(usuarioFullDTO.getPassword());
             usuarioFullDTO.setPassword(senhaCriptografada);

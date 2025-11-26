@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.SaleDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Sale;
 import br.com.leandrosnazareth.pdvapi.domain.repository.SaleRepository;
-import br.com.leandrosnazareth.pdvapi.dto.SaleDTO;
 
 @Service
 public class SaleService {

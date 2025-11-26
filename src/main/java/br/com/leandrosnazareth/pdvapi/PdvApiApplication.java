@@ -5,11 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@SpringBootApplication
 @EnableCaching
+@SpringBootApplication
 public class PdvApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PdvApiApplication.class, args);
-		System.out.println("Aqui o password" + new BCryptPasswordEncoder().encode("123"));
+		System.out.println("Aqui o password: " + new BCryptPasswordEncoder().encode("123"));
 	}
 }

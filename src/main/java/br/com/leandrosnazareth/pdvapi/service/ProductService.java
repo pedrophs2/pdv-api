@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.ProductDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Product;
 import br.com.leandrosnazareth.pdvapi.domain.repository.ProductRepository;
-import br.com.leandrosnazareth.pdvapi.dto.ProductDTO;
 
 @Service
 public class ProductService {
@@ -68,6 +68,11 @@ public class ProductService {
     public Optional<ProductDTO> findByNameAndActive(String name) {
         return productRepository.findByNameAndActive(name, true)
                 .map(product -> modelMapper.map(product, ProductDTO.class));
+    }
+
+    public Optional<ProductDTO> findByBarcodeAndActive(String barcode) {
+        return productRepository.findByBarcodeAndActive(barcode, true)
+            .map(product -> modelMapper.map(product, ProductDTO.class));
     }
 
     public void deactivate(@Valid Long id) {

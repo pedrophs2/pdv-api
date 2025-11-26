@@ -1,4 +1,4 @@
-package br.com.leandrosnazareth.pdvapi.dto;
+package br.com.leandrosnazareth.pdvapi.domain.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

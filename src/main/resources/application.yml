@@ -2,7 +2,7 @@
 # = Server
 # =================================
 server:
-  port: 8081
+  port: 8080
     # servlet:
     # context-path: /v1   #  controle de versao
 
@@ -16,7 +16,7 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3306/pdvdb?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
         username: root
-        password: root
+        password: admin
         type: com.zaxxer.hikari.HikariDataSource
     jpa: 
         database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -41,3 +41,9 @@ logging:
     level:
         org-springframework: INFO
         # org-flywaydb: INFO
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: mappings
