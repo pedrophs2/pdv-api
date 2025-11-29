@@ -5,15 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -34,6 +26,7 @@ import lombok.NoArgsConstructor;
 public class Sale implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -41,18 +34,28 @@ public class Sale implements Serializable {
 	@Column(nullable = false)
 	@NotNull(message = "{campo.valortotal.obrigatorio}")
 	private BigDecimal amount;
+
 	@Column(nullable = false)
 	@NotNull(message = "{campo.valorpago.obrigatorio}")
 	private BigDecimal amountPaid;
+
 	@Column(nullable = false)
 	@NotNull(message = "{campo.troco.obrigatorio}")
 	private BigDecimal difference;
+
 	@Column(nullable = false)
 	@NotNull(message = "{campo.formapagamento.obrigatorio}")
 	private Payment payment;
 
+	@Column(nullable = false)
+	@NotNull(message = "{campo.formapagamento.obrigatorio}")
+	private int installments;
+
 	@OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<ProductSold> productSolds;
+
+	@ManyToOne
+	private Usuario employee;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)

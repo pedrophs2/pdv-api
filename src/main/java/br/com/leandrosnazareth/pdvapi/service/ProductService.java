@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import br.com.leandrosnazareth.pdvapi.domain.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,8 +16,10 @@ import org.springframework.stereotype.Service;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 
 import br.com.leandrosnazareth.pdvapi.domain.dto.ProductDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.ProductSoldDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Product;
-import br.com.leandrosnazareth.pdvapi.domain.repository.ProductRepository;
+import br.com.leandrosnazareth.pdvapi.exception.InsufficientStockException;
+import br.com.leandrosnazareth.pdvapi.exception.InvalidItemException;
 
 @Service
 public class ProductService {
@@ -29,15 +32,32 @@ public class ProductService {
 
     public Page<ProductDTO> findAllDto(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map((product -> DozerBeanMapperBuilder.buildDefault()// converte pag<Product> para pga<pageproductdto>
+                .map((product -> DozerBeanMapperBuilder.buildDefault()
                         .map(product, ProductDTO.class)));
     }
 
     public List<ProductDTO> findAllActive() {
-        // busca lista de produtos e mapeia para lista de produtosdto
         return productRepository.findByActive(true).stream()
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public void processSaleProducts(List<ProductSoldDTO> soldProducts) throws InvalidItemException, InsufficientStockException {
+        for(ProductSoldDTO soldProduct: soldProducts) {
+            Optional<ProductDTO> validProductSearch = findById(soldProduct.getProduct().getId());
+
+            if(validProductSearch.isEmpty())
+                throw new InvalidItemException("Produto inválido dentro da venda");
+
+            ProductDTO validProduct = validProductSearch.get();
+            int newStock = validProduct.getStock() - soldProduct.getQuantity();
+
+            if(newStock < 0)
+                throw new InsufficientStockException(soldProduct.getProduct().getName());
+
+            validProduct.setStock(newStock);
+            save(validProduct);
+        }
     }
 
     public ProductDTO save(ProductDTO productDto) {

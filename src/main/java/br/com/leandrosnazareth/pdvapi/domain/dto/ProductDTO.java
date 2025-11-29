@@ -12,6 +12,7 @@ public class ProductDTO {
     private String barcode;
     private String name;
     private BigDecimal price;
+    private int stock;
     private Boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

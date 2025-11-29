@@ -54,16 +54,18 @@ public class Product implements Serializable {
     private BigDecimal price;
 
     @Column(nullable = false)
+    @NotNull(message = "{campo.estoque.obrigatorio}")
+    private int stock;
+
+    @Column(nullable = false)
     private Boolean active;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    // formatar data no json de retorno
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdAt;
 
     @LastModifiedBy
-    // formatar data no json de retorno
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 

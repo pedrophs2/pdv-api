@@ -39,21 +39,26 @@ import lombok.ToString;
 public class Usuario implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@Size(min = 3, max = 20, message = "Campo login deve ter entre 3 e 20 caracteres")
 	@NotNull(message = "Campo login é obrigatório")
 	@NotEmpty(message = "Campo login é obrigatório")
 	@Column(unique = true)
 	private String username;
+
 	@NotNull(message = "Campo senha é obrigatório")
 	@NotEmpty(message = "Campo senha é obrigatório")
 	private String password;
+
 	@Size(min = 3, max = 50, message = "Campo nome deve ter entre 3 e 50 caracteres")
 	@NotNull(message = "Campo nome é obrigatório")
 	@NotEmpty(message = "Campo nome é obrigatório")
 	private String name;
+
 	private String token = "";
 
 	@OneToMany(fetch = FetchType.EAGER)

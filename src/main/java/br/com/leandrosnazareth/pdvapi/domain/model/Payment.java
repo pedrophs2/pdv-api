@@ -2,11 +2,13 @@ package br.com.leandrosnazareth.pdvapi.domain.model;
 
 public enum Payment {
 
-    DINHEIRO("DINHEIRO"),
-    CARTAO("CARTÃO"),
-    VALEALIMENTACAO("VALE ALIMENTAÇÃO"),
-    CHEQUE("CHEQUE"),
-    FIADO("FIADO");
+    DINHEIRO("Dinheiro"),
+    DEBITO("Cartão de Débito"),
+    CREDITO("Cartão de Crédito"),
+    PIX("Pix"),
+    VALE_ALIMENTACAO("Vale Alimentação"),
+    CHEQUE("Cheque"),
+    FIADO("Fiado");
 
     private String name;
 

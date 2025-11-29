@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.ProductSoldDTO;
+import br.com.leandrosnazareth.pdvapi.exception.InsufficientStockException;
+import br.com.leandrosnazareth.pdvapi.exception.InvalidItemException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,43 +30,48 @@ public class SaleService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private SaleRepository saletRepository;
+    private SaleRepository saleRepository;
 
-    public SaleDTO save(SaleDTO saleDto) {
-        Sale sale = saletRepository.save(modelMapper.map(saleDto, Sale.class));
+    @Autowired
+    private ProductService productService;
+
+    public SaleDTO save(SaleDTO saleDto) throws InsufficientStockException, InvalidItemException {
+        productService.processSaleProducts(saleDto.getSoldProducts());
+
+        Sale sale = saleRepository.save(modelMapper.map(saleDto, Sale.class));
         return modelMapper.map(sale, SaleDTO.class);
     }
 
     public Page<SaleDTO> findAll(Pageable pageable) {
-        return saletRepository.findAll(pageable)
+        return saleRepository.findAll(pageable)
                 .map((sale -> DozerBeanMapperBuilder.buildDefault()// converte pag<Sale> para page<saledto>
                         .map(sale, SaleDTO.class)));
     }
 
     public Optional<SaleDTO> findById(long id) {
-        return saletRepository.findById(id)
+        return saleRepository.findById(id)
                 .map(sale -> modelMapper.map(sale, SaleDTO.class));
     }
 
     public void delete(SaleDTO saletDto) {
         Sale sale = modelMapper.map(saletDto, Sale.class);
-        saletRepository.delete(sale);
+        saleRepository.delete(sale);
     }
 
     public BigDecimal findValorTotalMonthAndYear2(@Valid LocalDateTime createdAt) {
-        return saletRepository.findValorTotalMonthAndYear2(createdAt);
+        return saleRepository.findValorTotalMonthAndYear2(createdAt);
     }
 
     public BigDecimal findValorTotalSales() {
-        return saletRepository.findValorTotalSales();
+        return saleRepository.findValorTotalSales();
     }
 
     public long countSales() {
-        return saletRepository.count();
+        return saleRepository.count();
     }
 
     public List<SaleDTO> findTopByOrderByIdDesc() {
-        return saletRepository.findTop5ByOrderByIdDesc().stream()
+        return saleRepository.findTop5ByOrderByIdDesc().stream()
                 .map(sale -> modelMapper.map(sale, SaleDTO.class))
                 .collect(Collectors.toList());
     }

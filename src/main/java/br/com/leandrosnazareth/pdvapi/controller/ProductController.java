@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
 import br.com.leandrosnazareth.pdvapi.domain.dto.ProductDTO;
-import br.com.leandrosnazareth.pdvapi.domain.entity.Product;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.ProductService;
 import br.com.leandrosnazareth.pdvapi.util.MessageConstant;

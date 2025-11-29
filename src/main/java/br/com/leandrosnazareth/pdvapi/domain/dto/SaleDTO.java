@@ -15,7 +15,9 @@ public class SaleDTO {
     private BigDecimal amountPaid;
     private BigDecimal difference;
     private Payment payment;
-    private List<ProductSoldDTO> productSolds;
+    private int installments;
+    private UserDTO employee;
+    private List<ProductSoldDTO> soldProducts;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -47,6 +47,12 @@ public class UserController {
         return ResponseEntity.ok().body(usuarioDTO);
     }
 
+    @GetMapping("/username/{name}")
+    public ResponseEntity<Usuario> findUserByName(@PathVariable String name) {
+        Usuario user = usuarioService.findByName(name);
+        return ResponseEntity.ok().body(user);
+    }
+
     @ApiOperation(value = "Deletar usuario pelo ID")
     @DeleteMapping("{id}")
     public Map<String, Boolean> deleteById(@PathVariable Long id) {
@@ -60,14 +66,8 @@ public class UserController {
 
     @ApiOperation(value = "Listar todos usuarios")
     @GetMapping
-    public List<UserDTO> findAllUsuario() {
+    public List<UserDTO> findAllUsuarios() {
         return usuarioService.findAll();
-    }
-
-    @ApiOperation(value = "Listar todos usuarios")
-    @GetMapping("/testeuser/{id}")
-    public Usuario findcomplete(@PathVariable Long id) {
-        return usuarioService.findById(id).get();
     }
 
     @ApiOperation(value = "Criar/cadastrar novo usuario")

@@ -24,8 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
 import br.com.leandrosnazareth.pdvapi.domain.dto.SaleDTO;
+import br.com.leandrosnazareth.pdvapi.exception.InsufficientStockException;
+import br.com.leandrosnazareth.pdvapi.exception.InvalidItemException;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.SaleService;
+import io.micrometer.core.ipc.http.HttpSender.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -39,18 +42,20 @@ public class SaleController {
 
     @GetMapping("{id}")
     @ApiOperation(value = "Buscar venda pelo ID")
-    public ResponseEntity<SaleDTO> findSaleById(@PathVariable Long id)
-            throws ResourceNotFoundException {
-        // retornar um Optional<saleDto> e converte para saleDto, em caso nulo
+    public ResponseEntity<SaleDTO> findSaleById(@PathVariable Long id) throws ResourceNotFoundException {
         SaleDTO saleDto = saleService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado uma venda com id: " + id));
         return ResponseEntity.ok().body(saleDto);
     }
 
     @PostMapping
-    @ApiOperation(value = "Salva uma venda")
-    public SaleDTO createSale(@Valid @RequestBody SaleDTO saleDto) {
-        return saleService.save(saleDto);
+    @ApiOperation(value = "Registra uma venda")
+    public ResponseEntity<?> createSale(@Valid @RequestBody SaleDTO saleDto) {
+        try {
+            return ResponseEntity.ok().body(saleService.save(saleDto));
+        } catch (InvalidItemException | InsufficientStockException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @ApiOperation(value = "Listar todas vendas ativas com paginação")
@@ -77,7 +82,7 @@ public class SaleController {
     @PutMapping("{id}")
     @ApiOperation(value = "Atualizar venda")
     public ResponseEntity<SaleDTO> updateSale(@PathVariable(value = "id") Long id,
-            @Valid @RequestBody SaleDTO saleDto) throws ResourceNotFoundException {
+            @Valid @RequestBody SaleDTO saleDto) throws ResourceNotFoundException, InvalidItemException, InsufficientStockException {
         saleService.findById(saleDto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Não foi encontrada uma venda com id: " + saleDto.getId()));
