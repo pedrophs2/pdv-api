@@ -34,8 +34,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-// implementar a interface UserDetails com os metodos de login do spring
-// security
 public class Usuario implements UserDetails {
 
 	private static final long serialVersionUID = 1L;

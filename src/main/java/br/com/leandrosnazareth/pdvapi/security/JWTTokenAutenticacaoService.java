@@ -75,14 +75,15 @@ public class JWTTokenAutenticacaoService {
 					Usuario usuario = ApplicationContextLoad.getApplicationContext()
 							.getBean(UserRepository.class).findUserByUsername(user);
 					if (usuario != null) {
+						return new UsernamePasswordAuthenticationToken(
+								usuario.getUsername(),
+								usuario.getPassword(),
+								usuario.getAuthorities());
 						// comparar token do banco com o fornecido pelo usuário
-						if (tokenLimpo.equalsIgnoreCase(usuario.getToken())) {
-							// retornar usuário com as permissões
-							return new UsernamePasswordAuthenticationToken(
-									usuario.getUsername(),
-									usuario.getPassword(),
-									usuario.getAuthorities());
-						}
+//						if (tokenLimpo.equalsIgnoreCase(usuario.getToken())) {
+//							// retornar usuário com as permissões
+//
+//						}
 					}
 				}
 			}

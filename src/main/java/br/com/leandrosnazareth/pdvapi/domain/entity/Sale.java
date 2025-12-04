@@ -52,7 +52,7 @@ public class Sale implements Serializable {
 	private int installments;
 
 	@OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-	private List<ProductSold> productSolds;
+	private List<ProductSold> products;
 
 	@ManyToOne
 	private Usuario employee;
@@ -80,7 +80,7 @@ public class Sale implements Serializable {
 	}
 
 	public void calcularValorTotal() {
-		for (ProductSold productSold : this.productSolds) {
+		for (ProductSold productSold : this.products) {
 			this.amountPaid = this.amountPaid.add(productSold.getPrice());
 		}
 	}

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import br.com.leandrosnazareth.pdvapi.exception.InvalidUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +29,6 @@ import br.com.leandrosnazareth.pdvapi.exception.InsufficientStockException;
 import br.com.leandrosnazareth.pdvapi.exception.InvalidItemException;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.SaleService;
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -53,7 +53,7 @@ public class SaleController {
     public ResponseEntity<?> createSale(@Valid @RequestBody SaleDTO saleDto) {
         try {
             return ResponseEntity.ok().body(saleService.save(saleDto));
-        } catch (InvalidItemException | InsufficientStockException e) {
+        } catch (InvalidItemException | InsufficientStockException | InvalidUserException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -82,7 +82,7 @@ public class SaleController {
     @PutMapping("{id}")
     @ApiOperation(value = "Atualizar venda")
     public ResponseEntity<SaleDTO> updateSale(@PathVariable(value = "id") Long id,
-            @Valid @RequestBody SaleDTO saleDto) throws ResourceNotFoundException, InvalidItemException, InsufficientStockException {
+            @Valid @RequestBody SaleDTO saleDto) throws ResourceNotFoundException, InvalidItemException, InsufficientStockException, InvalidUserException {
         saleService.findById(saleDto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Não foi encontrada uma venda com id: " + saleDto.getId()));

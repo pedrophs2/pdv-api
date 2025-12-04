@@ -1,5 +1,6 @@
 package br.com.leandrosnazareth.pdvapi.controller;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.PaymentDTO;
 import br.com.leandrosnazareth.pdvapi.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
-import br.com.leandrosnazareth.pdvapi.domain.model.Payment;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -23,7 +23,7 @@ public class PaymentController {
 
     @ApiOperation(value = "Listar formas de pagamentos")
     @GetMapping
-    public List<String> findAllActive() {
+    public List<PaymentDTO> findAllActive() {
         return paymentService.getAvailablePaymentMethods();
     }
 }

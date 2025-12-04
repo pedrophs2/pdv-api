@@ -8,9 +8,10 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import br.com.leandrosnazareth.pdvapi.domain.dto.ProductSoldDTO;
+import br.com.leandrosnazareth.pdvapi.domain.entity.Usuario;
 import br.com.leandrosnazareth.pdvapi.exception.InsufficientStockException;
 import br.com.leandrosnazareth.pdvapi.exception.InvalidItemException;
+import br.com.leandrosnazareth.pdvapi.exception.InvalidUserException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,10 +36,18 @@ public class SaleService {
     @Autowired
     private ProductService productService;
 
-    public SaleDTO save(SaleDTO saleDto) throws InsufficientStockException, InvalidItemException {
-        productService.processSaleProducts(saleDto.getSoldProducts());
+    @Autowired
+    private UserService userService;
 
-        Sale sale = saleRepository.save(modelMapper.map(saleDto, Sale.class));
+    public SaleDTO save(SaleDTO saleDto) throws InsufficientStockException, InvalidItemException, InvalidUserException {
+        productService.processSaleProducts(saleDto.getProducts());
+        Usuario employee = userService.findById(saleDto.getEmployee().getId())
+                .orElseThrow(() -> new InvalidUserException());
+
+        Sale sale = modelMapper.map(saleDto, Sale.class);
+        sale.setEmployee(employee);
+
+        saleRepository.save(sale);
         return modelMapper.map(sale, SaleDTO.class);
     }
 
