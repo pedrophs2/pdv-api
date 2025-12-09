@@ -1,9 +1,6 @@
-package br.com.leandrosnazareth.pdvapi.domain.dto;
+package br.com.leandrosnazareth.pdvapi.domain.dto.user;
 
-import br.com.leandrosnazareth.pdvapi.domain.entity.Role;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class UserDTO {

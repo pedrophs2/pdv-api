@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.user.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.domain.model.Payment;
 import lombok.Data;
 

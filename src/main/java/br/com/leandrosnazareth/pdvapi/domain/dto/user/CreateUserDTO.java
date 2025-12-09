@@ -1,4 +1,4 @@
-package br.com.leandrosnazareth.pdvapi.domain.dto;
+package br.com.leandrosnazareth.pdvapi.domain.dto.user;
 
 import lombok.Data;
 

@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import br.com.leandrosnazareth.pdvapi.domain.dto.CreateUserDTO;
-import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.user.CreateUserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.user.EditUserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.user.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.leandrosnazareth.pdvapi.domain.dto.LoginDTO;
-import br.com.leandrosnazareth.pdvapi.domain.dto.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Usuario;
 import br.com.leandrosnazareth.pdvapi.domain.repository.UserRepository;
 
@@ -50,5 +50,17 @@ public class UserService {
     public LoginDTO save(CreateUserDTO user) {
         Usuario usuario = modelMapper.map(user, Usuario.class);
         return modelMapper.map(usuarioRepository.save(usuario), LoginDTO.class);
+    }
+
+    public UserDTO edit(EditUserDTO user) {
+        UserDTO usuario = modelMapper.map(user, UserDTO.class);
+
+        usuarioRepository.editUser(
+                user.getUsername(),
+                user.getName(),
+                user.getId()
+        );
+
+        return usuario;
     }
 }

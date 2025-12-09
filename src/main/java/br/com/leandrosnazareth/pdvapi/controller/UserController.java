@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.leandrosnazareth.pdvapi.domain.dto.CreateUserDTO;
-import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.user.CreateUserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.user.EditUserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.user.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
 import br.com.leandrosnazareth.pdvapi.domain.dto.LoginDTO;
-import br.com.leandrosnazareth.pdvapi.domain.dto.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Usuario;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.UserService;
@@ -82,13 +82,10 @@ public class UserController {
 
     @ApiOperation(value = "Atualizar usuario")
     @PutMapping
-    public LoginDTO atualizar(@RequestBody CreateUserDTO usuarioFullDTO) {
+    public UserDTO edit(@RequestBody EditUserDTO usuarioFullDTO) {
         Usuario usuarioTemporadrio = usuarioService.findById(usuarioFullDTO.getId()).orElseThrow(
-                () -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + usuarioFullDTO.getId()));
-        if (!usuarioFullDTO.getPassword().equals(usuarioTemporadrio.getPassword())) { // se Senhas for diferentes
-            String senhaCriptografada = new BCryptPasswordEncoder().encode(usuarioFullDTO.getPassword());
-            usuarioFullDTO.setPassword(senhaCriptografada);
-        }
-        return usuarioService.save(usuarioFullDTO);
+                () -> new ResourceNotFoundException(MessageConstant.USER_NOT_FOUND + usuarioFullDTO.getId()));
+
+        return usuarioService.edit(usuarioFullDTO);
     }
 }
