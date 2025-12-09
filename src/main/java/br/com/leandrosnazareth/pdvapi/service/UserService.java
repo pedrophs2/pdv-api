@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.CreateUserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.LoginDTO;
 import br.com.leandrosnazareth.pdvapi.domain.dto.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Usuario;
 import br.com.leandrosnazareth.pdvapi.domain.repository.UserRepository;
@@ -22,9 +24,9 @@ public class UserService {
     @Autowired
     private UserRepository usuarioRepository;
 
-    public Optional<UserDTO> findByIdDTO(long id) {
+    public Optional<LoginDTO> findByIdDTO(long id) {
         return usuarioRepository.findById(id)
-                .map(usuario -> modelMapper.map(usuario, UserDTO.class));
+                .map(usuario -> modelMapper.map(usuario, LoginDTO.class));
     }
 
     public Optional<Usuario> findById(long id) {
@@ -45,8 +47,8 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserDTO save(UserFullDTO usuarioFullDTO) {
-        Usuario usuario = modelMapper.map(usuarioFullDTO, Usuario.class);
-        return modelMapper.map(usuarioRepository.save(usuario), UserDTO.class);
+    public LoginDTO save(CreateUserDTO user) {
+        Usuario usuario = modelMapper.map(user, Usuario.class);
+        return modelMapper.map(usuarioRepository.save(usuario), LoginDTO.class);
     }
 }

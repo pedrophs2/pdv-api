@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.leandrosnazareth.pdvapi.domain.dto.CreateUserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
-import br.com.leandrosnazareth.pdvapi.domain.dto.UserDTO;
+import br.com.leandrosnazareth.pdvapi.domain.dto.LoginDTO;
 import br.com.leandrosnazareth.pdvapi.domain.dto.UserFullDTO;
 import br.com.leandrosnazareth.pdvapi.domain.entity.Usuario;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
@@ -40,9 +42,9 @@ public class UserController {
     @GetMapping("{id}")
     @CacheEvict(value = "cacheuserid", allEntries = true) // limpar o cache que não é utilizado a um tempo
     @CachePut("cacheuserid") // identificar as atualizações no bd e add ao cache
-    public ResponseEntity<UserDTO> findUserByID(@PathVariable Long id)
+    public ResponseEntity<LoginDTO> findUserByID(@PathVariable Long id)
             throws ResourceNotFoundException {
-        UserDTO usuarioDTO = usuarioService.findByIdDTO(id)
+        LoginDTO usuarioDTO = usuarioService.findByIdDTO(id)
                 .orElseThrow(() -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + id));
         return ResponseEntity.ok().body(usuarioDTO);
     }
@@ -72,15 +74,15 @@ public class UserController {
 
     @ApiOperation(value = "Criar/cadastrar novo usuario")
     @PostMapping
-    public UserDTO createUsuraio(@RequestBody UserFullDTO usuarioFullDTO) {
-        String senhacriptografada = new BCryptPasswordEncoder().encode(usuarioFullDTO.getPassword());
-        usuarioFullDTO.setPassword(senhacriptografada);
-        return usuarioService.save(usuarioFullDTO);
+    public LoginDTO createUsuraio(@RequestBody CreateUserDTO user) {
+        String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+        return usuarioService.save(user);
     }
 
     @ApiOperation(value = "Atualizar usuario")
     @PutMapping
-    public UserDTO atualizar(@RequestBody UserFullDTO usuarioFullDTO) {
+    public LoginDTO atualizar(@RequestBody CreateUserDTO usuarioFullDTO) {
         Usuario usuarioTemporadrio = usuarioService.findById(usuarioFullDTO.getId()).orElseThrow(
                 () -> new ResourceNotFoundException(MessageConstant.PRODUTO_NAO_ENCONTRADO + usuarioFullDTO.getId()));
         if (!usuarioFullDTO.getPassword().equals(usuarioTemporadrio.getPassword())) { // se Senhas for diferentes
